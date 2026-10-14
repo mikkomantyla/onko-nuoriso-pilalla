@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Onko nuoriso pilalla?</title>
+    <meta name="description" content="Yläastevisa: kolme kysymystä jokaisesta aineesta." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎒</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Lilita+One&family=Noto+Music&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="viewport">
+      <div id="stage">
+        <div id="scene"></div>
+        <div id="wipe" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div id="hud">
+      <button class="hud-btn" id="btn-home" type="button" aria-label="Alkuun" title="Alkuun (Home)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5" /><path d="M5.5 10v9.5h5v-5.5h3v5.5h5V10" /></svg>
+        <span>Alkuun</span>
+      </button>
+      <div class="hud-right">
+        <button class="hud-btn round" id="btn-fullscreen" type="button" aria-label="Koko näyttö" title="Koko näyttö (F)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg>
+        </button>
+        <button class="hud-btn round" id="btn-mute" type="button" aria-label="Mykistä musiikki" aria-pressed="false" title="Musiikki päälle/pois (M)">
+          <svg class="icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h4L13 5v14l-5-4.5H4z" /><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" /></svg>
+          <svg class="icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h4L13 5v14l-5-4.5H4z" /><path d="m16.5 9.5 5 5M21.5 9.5l-5 5" /></svg>
+        </button>
+      </div>
+      <div class="hud-bottom">
+        <button class="hud-btn round small" id="btn-prev" type="button" aria-label="Edellinen maailma">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" /></svg>
+        </button>
+        <div id="progress" aria-live="polite"></div>
+        <button class="hud-btn round small" id="btn-next" type="button" aria-label="Seuraava maailma">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+        </button>
+      </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

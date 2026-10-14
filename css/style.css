@@ -1,0 +1,515 @@
+:root {
+  --ink: #2b1a10;
+  --cream: #fff6df;
+  --letterbox: #1b1036;
+  --hud-bg: #ffd23f;
+  --hud-bg-hover: #ffe27a;
+  --display: "Lilita One", "Baloo 2", system-ui, sans-serif;
+  --body: "Baloo 2", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--letterbox);
+  font-family: var(--body);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The game is laid out on a fixed 1920×1080 stage that is scaled to fit the window. */
+#viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+#stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform-origin: 0 0;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #241446;
+}
+
+#scene,
+.scene {
+  position: absolute;
+  inset: 0;
+}
+
+.scene svg.backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- World wipe ---------- */
+#wipe {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+#wipe .blob {
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  margin: -280px 0 0 -280px;
+  border-radius: 50%;
+  border: 10px solid var(--ink);
+  transform: scale(0);
+}
+
+/* ---------- Shared game typography ---------- */
+.game-text {
+  font-family: var(--display);
+  color: #fff;
+  -webkit-text-stroke: 14px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 12px 0 var(--ink);
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+/* ---------- Pop-in for SVG props ---------- */
+.pop {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: pop-in 0.7s cubic-bezier(0.34, 1.7, 0.5, 1) both;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0) rotate(-8deg);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+.room-base {
+  animation: room-in 0.6s ease-out both;
+}
+
+@keyframes room-in {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Subject world ---------- */
+.subject-title {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.subject-title .banner {
+  position: relative;
+  padding: 50px 110px 70px;
+  border: 12px solid var(--ink);
+  border-radius: 60px;
+  background: var(--subject-color);
+  box-shadow:
+    inset 0 -22px 0 rgba(0, 0, 0, 0.18),
+    inset 0 18px 0 rgba(255, 255, 255, 0.28),
+    0 22px 0 var(--ink);
+  animation: title-in 0.9s cubic-bezier(0.34, 1.6, 0.5, 1) both;
+}
+
+.subject-title .banner .game-text {
+  display: block;
+  font-size: 190px;
+  -webkit-text-stroke-width: 20px;
+  text-shadow: 0 16px 0 var(--ink);
+}
+
+.subject-title .banner .kicker {
+  position: absolute;
+  left: 50%;
+  top: -46px;
+  transform: translateX(-50%) rotate(-3deg);
+  padding: 8px 34px 10px;
+  border: 8px solid var(--ink);
+  border-radius: 999px;
+  background: var(--cream);
+  font-family: var(--display);
+  font-size: 46px;
+  white-space: nowrap;
+}
+
+.subject-title .banner .spark {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  animation: twinkle 1.4s ease-in-out infinite;
+}
+
+.subject-title.leaving .banner {
+  animation: title-out 0.55s cubic-bezier(0.6, -0.5, 0.7, 0.4) both;
+}
+
+@keyframes title-in {
+  0% {
+    transform: scale(0) rotate(-12deg);
+  }
+  100% {
+    transform: scale(1) rotate(-2deg);
+  }
+}
+
+@keyframes title-out {
+  0% {
+    transform: scale(1) rotate(-2deg);
+  }
+  100% {
+    transform: scale(0) rotate(10deg) translateY(-200px);
+    opacity: 0;
+  }
+}
+
+.questions {
+  position: absolute;
+  left: 430px;
+  top: 250px;
+  width: 1060px;
+  height: 740px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 34px;
+  z-index: 5;
+}
+
+.q-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  min-height: 190px;
+  padding: 26px 44px 30px 30px;
+  border: 8px solid var(--ink);
+  border-radius: 34px;
+  background: var(--cream);
+  box-shadow:
+    inset 0 -12px 0 rgba(120, 80, 30, 0.14),
+    0 12px 0 var(--ink);
+  opacity: 0;
+}
+
+.q-card:nth-child(1) {
+  rotate: -1.2deg;
+}
+.q-card:nth-child(2) {
+  rotate: 0.8deg;
+}
+.q-card:nth-child(3) {
+  rotate: -0.6deg;
+}
+
+.questions.show .q-card {
+  animation: card-in 0.75s cubic-bezier(0.34, 1.6, 0.5, 1) both;
+  animation-delay: calc(var(--i) * 0.4s);
+}
+
+@keyframes card-in {
+  0% {
+    opacity: 0;
+    transform: translateY(80px) scale(0.6);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.q-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 118px;
+  height: 118px;
+  border: 8px solid var(--ink);
+  border-radius: 50%;
+  background: var(--subject-color);
+  box-shadow:
+    inset 0 -10px 0 rgba(0, 0, 0, 0.2),
+    inset 0 8px 0 rgba(255, 255, 255, 0.3);
+}
+
+.q-num .game-text {
+  font-size: 72px;
+  -webkit-text-stroke-width: 12px;
+  text-shadow: 0 6px 0 var(--ink);
+}
+
+.q-text {
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 50px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.q-symbol {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 190px;
+  height: 230px;
+  margin: -16px 0;
+  border: 6px solid var(--ink);
+  border-radius: 22px;
+  background: #fff;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 40px,
+    var(--ink) 40px 44px
+  );
+  background-position: 0 47px;
+  background-size: 100% 220px;
+  background-repeat: no-repeat;
+  font-family: "Noto Music", serif;
+  font-size: 210px;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* ---------- Idle loops ---------- */
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.7) rotate(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.15) rotate(25deg);
+    opacity: 1;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+/* ---------- HUD ---------- */
+#hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.hud-btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 22px 4px 16px;
+  border: 4px solid var(--ink);
+  border-radius: 999px;
+  background: var(--hud-bg);
+  box-shadow:
+    inset 0 -6px 0 rgba(0, 0, 0, 0.16),
+    0 5px 0 var(--ink);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 24px;
+  cursor: pointer;
+  transition:
+    transform 0.12s,
+    background 0.12s;
+}
+
+.hud-btn:hover {
+  background: var(--hud-bg-hover);
+  transform: translateY(-2px);
+}
+
+.hud-btn:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 -6px 0 rgba(0, 0, 0, 0.16),
+    0 2px 0 var(--ink);
+}
+
+.hud-btn:focus-visible {
+  outline: 4px solid #fff;
+  outline-offset: 3px;
+}
+
+.hud-btn svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hud-btn.round {
+  width: 56px;
+  padding: 0;
+  justify-content: center;
+}
+
+.hud-btn.small {
+  width: 46px;
+  height: 46px;
+}
+
+.hud-btn.small svg {
+  width: 24px;
+  height: 24px;
+}
+
+#btn-home {
+  position: absolute;
+  left: 18px;
+  top: 16px;
+}
+
+.hud-right {
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+#btn-mute .icon-off,
+#btn-mute[aria-pressed="true"] .icon-on {
+  display: none;
+}
+
+#btn-mute[aria-pressed="true"] .icon-off {
+  display: block;
+}
+
+.hud-bottom {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#progress {
+  pointer-events: none;
+  padding: 6px 20px 8px;
+  border: 4px solid var(--ink);
+  border-radius: 999px;
+  background: rgba(255, 246, 223, 0.92);
+  font-family: var(--display);
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+/* The HUD stays out of the way once the game is presented full screen. */
+body.is-fullscreen .hud-bottom,
+body.is-fullscreen #btn-fullscreen {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+body.is-fullscreen #hud:hover .hud-bottom {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .hud-btn span {
+    display: none;
+  }
+  #btn-home {
+    width: 56px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+
+/* Shared idle loops for room props; each element sets its own transform-box and origin inline. */
+.spin-slow {
+  animation: spin 60s linear infinite;
+}
+.spin-fast {
+  animation: spin 6s steps(60) infinite;
+}
+.drift {
+  animation: drift 9s ease-in-out infinite alternate;
+}
+.sway-soft {
+  animation: sway-soft 3.2s ease-in-out infinite;
+}
+.bob {
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+@keyframes drift {
+  to {
+    transform: translateX(60px);
+  }
+}
+
+@keyframes sway-soft {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
