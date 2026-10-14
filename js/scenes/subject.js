@@ -1,5 +1,5 @@
 import { rooms } from "../art/rooms/index.js";
-import { W, H, starPath, INK, roomBase } from "../art/kit.js";
+import { W, H, starPath, INK } from "../art/kit.js";
 
 const TITLE_AT_MS = 1300;
 const TITLE_HOLD_MS = 2300;
@@ -17,7 +17,7 @@ function spark(x, y, color, delay) {
  * then the three questions pop in while the room's idle loops keep playing.
  */
 export function subjectScene(root, subject) {
-  const room = rooms[subject.key] ?? { draw: () => roomBase({ wall: subject.color }) };
+  const room = rooms[subject.key];
   root.style.setProperty("--subject-color", subject.color);
   root.innerHTML = `
     <svg class="backdrop room-${subject.key}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">
