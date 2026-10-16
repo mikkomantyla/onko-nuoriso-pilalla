@@ -141,3 +141,6 @@ export const pisa = {
     { label: "matematiikka", color: "#ffd96b", finland: [380, 332, 278, 286, 259, 123, 51], oecd: [146, 164, 173, 154, 137, 88, 15] },
   ],
 };
+
+// High schools with their latest admission cut-off (lukuaineiden keskiarvo). The quizmaster supplies the full list.
+export const schools = [{ name: "Vaskivuoren lukio", year: 2026, limit: 7.67 }];

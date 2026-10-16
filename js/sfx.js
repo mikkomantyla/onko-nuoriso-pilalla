@@ -349,6 +349,43 @@ const effects = {
   },
 };
 
+// The report card world: entry, the report landing, the drumroll before the average and the final fanfare.
+Object.assign(effects, {
+  // Paper rustle and a "ding-dong" chime.
+  todistus(t) {
+    for (let i = 0; i < 6; i++) hiss(t + i * 0.06 + rand(0, 0.03), 0.07, 0.14, { freq: rand(2500, 5000), q: 1.2 });
+    tone("sine", 1319, t + 0.45, 1.4, 0.14);
+    tone("sine", 2638, t + 0.45, 0.5, 0.04);
+    tone("sine", 1047, t + 0.85, 1.8, 0.14);
+    tone("sine", 2094, t + 0.85, 0.6, 0.04);
+    return 2.4;
+  },
+
+  // A rubber stamp thumping onto paper.
+  stamp(t) {
+    hiss(t, 0.25, 0.5, { type: "lowpass", freq: 900, to: 200 });
+    tone("sine", 120, t, 0.18, 0.6, { to: 55 });
+    hiss(t + 0.02, 0.05, 0.25, { type: "highpass", freq: 3000 });
+    return 0.5;
+  },
+
+  // A snare roll building up, landing on a cymbal crash.
+  drumroll(t) {
+    const length = 1.7;
+    for (let at = 0; at < length; at += 0.045) {
+      hiss(t + at, 0.06, 0.08 + (at / length) * 0.3, { freq: 1900, q: 0.8 });
+    }
+    hiss(t + length, 1.8, 0.3, { type: "highpass", freq: 5200 });
+    hiss(t + length, 0.9, 0.2, { freq: 9000, q: 0.8 });
+    tone("sine", 140, t + length, 0.35, 0.8, { to: 45 });
+    return length + 1.2;
+  },
+
+  fanfare(t) {
+    return effects.end(t);
+  },
+});
+
 let lastEffect = null;
 
 /** Plays the effect for a world `delay` seconds from now, ducking the music under it; the previous world's effect fades out. */

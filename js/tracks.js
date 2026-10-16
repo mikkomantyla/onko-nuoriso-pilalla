@@ -394,4 +394,33 @@ export const tracks = {
     },
     drumLevels: { hat: 0.6 },
   },
+
+  // Graduation day: bright strings and brass with a hopeful march feel.
+  todistus: {
+    bpm: 104,
+    chords: ["G", "D", "Em", "C", "G", "D", "C", "G"],
+    chordInst: "strings",
+    chordRhythm: "x-------x-------",
+    bassInst: "pluckBass",
+    bass: "1 - - - 5 - - - 8 - - - 5 - - -",
+    leadInst: "brass",
+    lead: [
+      "D5 - - - G5 - - - B5 - - - A5 - G5 -",
+      "A5 - - - - - - - F#5 - - - D5 - - -",
+      "E5 - - - G5 - - - B5 - - - D6 - - -",
+      "C6 - - - B5 - - - A5 - - - - - - -",
+      "B5 - - - D6 - - - B5 - - - G5 - - -",
+      "A5 - - - F#5 - - - A5 - - - D6 - - -",
+      "E6 - - - D6 - - - C6 - - - A5 - - -",
+      "G5 - - - - - - - . . . . D5 - - -",
+    ],
+    drums: {
+      kick: "x.......x.......",
+      snare: "....x.......x...",
+      tom: "..............xx",
+      hat: ".x.x.x.x.x.x.x.x",
+    },
+    drumLevels: { snare: 0.5, hat: 0.35, tom: 0.6 },
+    mix: { chordsSend: 0.35, leadSend: 0.35 },
+  },
 };

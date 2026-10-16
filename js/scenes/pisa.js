@@ -69,17 +69,6 @@ function chart() {
       <rect width="${BOARD.w}" height="${BOARD.h}" rx="10" fill="#244a3b" ${ol(6)}/>
       <rect x="14" y="14" width="${BOARD.w - 28}" height="200" rx="8" fill="#fff" opacity="0.05"/>
 
-      <!-- legend -->
-      <g font-family="Baloo 2, sans-serif" font-weight="800" font-size="36" fill="#f4f1e6">
-        ${pisa.series
-          .map((s, i) => {
-            const x = 360 + i * 320;
-            return `<line x1="${x}" y1="72" x2="${x + 50}" y2="72" stroke="${s.color}" stroke-width="12" stroke-linecap="round"/>
-              <text x="${x + 66}" y="84">${s.label}</text>`;
-          })
-          .join("")}
-      </g>
-
       ${yearTicks
         .map(
           (year) => `<line x1="${xOf(year)}" y1="${PLOT.top - 30}" x2="${xOf(year)}" y2="${PLOT.bottom + 20}" stroke="#f4f1e6" stroke-width="4" stroke-dasharray="4 14" stroke-linecap="round" opacity="0.45"/>
@@ -132,6 +121,9 @@ const style = `<style>
   .pisa-rain { opacity: 0; }
   .pisa-done .pisa-rain { animation: pisa-rain 0.9s linear infinite; animation-delay: calc(0.6s + var(--r) * 0.13s); }
   .pisa-title { animation: pop-in 0.8s cubic-bezier(.34,1.7,.5,1) both; }
+  .pisa-legend { position: absolute; display: flex; justify-content: center; gap: 60px; font-family: var(--body); font-weight: 800; font-size: 36px; color: #f4f1e6; animation: pop-in 0.7s 0.3s cubic-bezier(.34,1.7,.5,1) both; }
+  .pisa-legend span { display: flex; align-items: center; gap: 16px; }
+  .pisa-legend i { width: 50px; height: 12px; border-radius: 6px; }
   @keyframes pisa-stamp { 0% { transform: scale(3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
   @keyframes pisa-wobble { 0%, 100% { transform: rotate(-3deg) scale(1); } 50% { transform: rotate(3deg) scale(1.06); } }
   @keyframes pisa-rain { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(110px); } }
@@ -144,7 +136,10 @@ export function pisaScene(root) {
       ${landscape()}
       ${pop(0.1, chart(), "50% 100%")}
     </svg>
-    <div class="pisa-title game-text" style="position:absolute;left:0;right:0;top:46px;text-align:center;font-size:110px">Pisa-tulokset</div>`;
+    <div class="pisa-title game-text" style="position:absolute;left:0;right:0;top:46px;text-align:center;font-size:110px">Pisa-tulokset</div>
+    <div class="pisa-legend" style="left:${BOARD.x}px;top:${BOARD.y + 44}px;width:${BOARD.w}px">
+      ${pisa.series.map((s) => `<span><i style="background:${s.color}"></i>${s.label}</span>`).join("")}
+    </div>`;
 
   const svg = root.querySelector("svg");
   const clip = root.querySelector(".pisa-clip");

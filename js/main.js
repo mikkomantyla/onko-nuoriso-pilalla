@@ -4,6 +4,7 @@ import { pisaScene } from "./scenes/pisa.js";
 import { coverScene } from "./scenes/cover.js";
 import { subjectScene } from "./scenes/subject.js";
 import { endScene } from "./scenes/end.js";
+import { reportScene } from "./scenes/report.js";
 import { playSfx } from "./sfx.js";
 
 const STAGE_W = 1920;
@@ -21,6 +22,7 @@ const worlds = [
     create: (root) => subjectScene(root, subject),
   })),
   { label: "Vastausten aika!", track: "end", create: endScene },
+  { label: "Todistusten aika!", track: "todistus", create: reportScene },
 ];
 
 const stage = document.getElementById("stage");
@@ -130,6 +132,7 @@ function toggleFullscreen() {
 
 window.addEventListener("keydown", (event) => {
   if (event.metaKey || event.ctrlKey || event.altKey) return;
+  if (event.target instanceof HTMLInputElement) return;
   switch (event.key) {
     case "ArrowRight":
     case "PageDown":
