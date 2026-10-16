@@ -195,62 +195,117 @@ const effects = {
     return 2.5;
   },
 
-  // A chainsaw: two failed pulls on the cord, then it catches, revs twice and settles.
+  // A two-stroke chainsaw: the recoil cord rattles, two dying coughs, then it catches, idles lumpily, revs twice and settles.
   puutyot(t) {
-    const pull = (at) => {
-      hiss(at, 0.32, 0.3, { freq: 500, to: 1600, q: 1.5, attack: 0.02 });
-      for (let i = 0; i < 5; i++) tone("sawtooth", 70, at + 0.18 + i * 0.045, 0.04, 0.18, { to: 50 });
+    const pull = (at, coughs) => {
+      let click = at;
+      for (let i = 0; i < 16; i++) {
+        hiss(click, 0.012, 0.22, { freq: 2600, q: 3 });
+        click += 0.028 - i * 0.0011;
+      }
+      hiss(at, 0.4, 0.1, { freq: 300, to: 900, q: 0.8, attack: 0.05 });
+      for (let i = 0; i < coughs; i++) {
+        const c = at + 0.42 + i * 0.1;
+        hiss(c, 0.07, 0.45 - i * 0.12, { type: "lowpass", freq: 500 });
+        tone("sine", 70, c, 0.08, 0.35 - i * 0.1, { to: 45 });
+      }
     };
-    pull(t);
-    pull(t + 0.75);
-    pull(t + 1.5);
+    pull(t, 2);
+    pull(t + 0.85, 3);
 
-    const start = t + 1.85;
-    const end = start + 2.6;
-    const engine = a.ctx.createOscillator();
-    const engine2 = a.ctx.createOscillator();
-    engine.type = engine2.type = "sawtooth";
-    engine2.detune.value = 25;
-    const rpm = [
-      [0, 48], [0.45, 52], [0.7, 150], [1.05, 150], [1.2, 75], [1.45, 175], [1.95, 175], [2.15, 58], [2.6, 50],
-    ];
-    [engine, engine2].forEach((o) => {
-      o.frequency.setValueAtTime(rpm[0][1], start);
-      rpm.slice(1).forEach(([at, f]) => o.frequency.linearRampToValueAtTime(f, start + at));
+    const start = t + 1.75;
+    const end = start + 2.9;
+    // Firing rate in Hz: idle around 50, wide open around 185.
+    const rpm = [[0, 46], [0.5, 52], [0.65, 44], [0.9, 50], [1.12, 178], [1.5, 184], [1.72, 70], [1.92, 188], [2.35, 186], [2.5, 56], [2.7, 48]];
+    const follow = (param, map) => {
+      param.setValueAtTime(map(rpm[0][1]), start);
+      rpm.slice(1).forEach(([at, f]) => param.linearRampToValueAtTime(map(f), start + at));
+    };
+    const ctx = a.ctx;
+
+    // Each cylinder firing is a pulse: a sawtooth shaped into short spikes gates the exhaust noise.
+    const firing = ctx.createOscillator();
+    firing.type = "sawtooth";
+    follow(firing.frequency, (f) => f);
+    const pulses = ctx.createWaveShaper();
+    pulses.curve = Float32Array.from({ length: 512 }, (_, i) => {
+      const x = (i / 511) * 2 - 1;
+      return x > 0.4 ? ((x - 0.4) / 0.6) ** 2 : 0;
     });
-    const lp = a.ctx.createBiquadFilter();
-    lp.type = "lowpass";
-    lp.frequency.value = 2200;
-    const g = a.ctx.createGain();
-    g.gain.setValueAtTime(0.0001, start);
-    g.gain.linearRampToValueAtTime(0.16, start + 0.05);
-    g.gain.setValueAtTime(0.16, end - 0.4);
-    g.gain.exponentialRampToValueAtTime(0.0001, end);
-    const shaper = distortion(18);
-    engine.connect(shaper);
-    engine2.connect(shaper);
-    shaper.connect(lp).connect(g).connect(a.out);
-    [engine, engine2].forEach((o) => {
+    const exhaustGate = ctx.createGain();
+    exhaustGate.gain.value = 0;
+    firing.connect(pulses).connect(exhaustGate.gain);
+    const exhaust = ctx.createBufferSource();
+    exhaust.buffer = a.noise;
+    exhaust.loop = true;
+    const exhaustTone = ctx.createBiquadFilter();
+    exhaustTone.type = "bandpass";
+    exhaustTone.Q.value = 0.7;
+    follow(exhaustTone.frequency, (f) => 500 + f * 9);
+    exhaust.connect(exhaustTone).connect(exhaustGate);
+
+    // The engine's raspy bark, brighter as it revs.
+    const bark = ctx.createOscillator();
+    bark.type = "square";
+    follow(bark.frequency, (f) => f);
+    const rasp = distortion(30);
+    const barkTone = ctx.createBiquadFilter();
+    barkTone.type = "lowpass";
+    barkTone.Q.value = 4;
+    follow(barkTone.frequency, (f) => 400 + f * 16);
+    const barkLevel = ctx.createGain();
+    barkLevel.gain.value = 0.35;
+    bark.connect(rasp).connect(barkTone).connect(barkLevel);
+
+    // The chain whining around the bar at high revs.
+    const chain = ctx.createOscillator();
+    chain.type = "sawtooth";
+    follow(chain.frequency, (f) => f * 5.3);
+    const chainTone = ctx.createBiquadFilter();
+    chainTone.type = "bandpass";
+    chainTone.frequency.value = 3200;
+    chainTone.Q.value = 2;
+    const chainLevel = ctx.createGain();
+    follow(chainLevel.gain, (f) => Math.max(0, (f - 60) / 125) * 0.25);
+    chain.connect(chainTone).connect(chainLevel);
+
+    // An uneven idle.
+    const lump = ctx.createOscillator();
+    lump.frequency.value = 6.5;
+    const lumpDepth = ctx.createGain();
+    lumpDepth.gain.value = 4;
+    lump.connect(lumpDepth);
+    lumpDepth.connect(firing.frequency);
+    lumpDepth.connect(bark.frequency);
+
+    const level = ctx.createGain();
+    follow(level.gain, (f) => 0.2 + ((f - 44) / 145) * 0.14);
+    level.gain.setTargetAtTime(0.0001, start + 2.75, 0.06);
+    exhaustGate.connect(level);
+    barkLevel.connect(level);
+    chainLevel.connect(level);
+    level.connect(a.out);
+
+    [firing, bark, chain, lump].forEach((o) => {
       o.start(start);
-      o.stop(end + 0.05);
+      o.stop(end + 0.3);
     });
-    hiss(start + 0.7, 0.4, 0.08, { freq: 3000, q: 1 });
-    hiss(start + 1.45, 0.55, 0.08, { freq: 3200, q: 1 });
+    exhaust.start(start);
+    exhaust.stop(end + 0.3);
     return end - t;
   },
 
-  // A sewing machine speeding up, stitching and slowing down.
-  kasityot(t) {
-    tone("sawtooth", 95, t, 1.9, 0.04, { attack: 0.2 });
-    let at = t + 0.1;
-    let rate = 6;
-    while (at < t + 1.8) {
-      hiss(at, 0.018, 0.4, { freq: 3200, q: 4 });
-      tone("sine", 620, at, 0.025, 0.12);
-      rate = at < t + 1.3 ? Math.min(rate * 1.12, 17) : rate * 0.88;
-      at += 1 / rate;
+  // Pencil scribbles, two brush swishes and a paint splat.
+  kuvaamataito(t) {
+    for (let i = 0; i < 9; i++) {
+      hiss(t + i * 0.07, 0.065, 0.16, { freq: i % 2 ? 3200 : 4600, to: i % 2 ? 4600 : 3200, q: 2.5, attack: 0.01 });
     }
-    return 2;
+    hiss(t + 0.8, 0.3, 0.18, { freq: 1300, to: 600, q: 1, attack: 0.06 });
+    hiss(t + 1.15, 0.3, 0.18, { freq: 1300, to: 600, q: 1, attack: 0.06 });
+    hiss(t + 1.6, 0.3, 0.6, { type: "lowpass", freq: 2000, to: 220 });
+    tone("sine", 150, t + 1.6, 0.18, 0.5, { to: 55 });
+    [0.12, 0.2, 0.31].forEach((o) => tone("sine", rand(900, 1500), t + 1.6 + o, 0.05, 0.08, { to: 600 }));
+    return 2.1;
   },
 
   // A jet flying past from left to right.

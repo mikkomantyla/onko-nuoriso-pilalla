@@ -2,8 +2,8 @@ import aidinkieli from "./aidinkieli.js";
 import biologia from "./biologia.js";
 import fysiikka from "./fysiikka.js";
 import historia from "./historia.js";
-import kasityot from "./kasityot.js";
 import kemia from "./kemia.js";
+import kuvaamataito from "./kuvaamataito.js";
 import maantieto from "./maantieto.js";
 import matematiikka from "./matematiikka.js";
 import musiikki from "./musiikki.js";
@@ -18,8 +18,8 @@ export const rooms = {
   biologia,
   fysiikka,
   historia,
-  kasityot,
   kemia,
+  kuvaamataito,
   maantieto,
   matematiikka,
   musiikki,

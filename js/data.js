@@ -7,7 +7,7 @@ export const subjects = [
     questions: [
       "Kuinka monta allekirjoitusta kansalaisaloite tarvitsee, jotta eduskunta ottaa sen käsiteltäväksi?",
       "Kuinka monta jäsenmaata Euroopan unionissa on?",
-      "Kuinka monen vuoden välein eduskuntavaalit järjestetään?",
+      "Minä vuonna Suomesta tuli Naton jäsen?",
     ],
   },
   {
@@ -77,7 +77,7 @@ export const subjects = [
     questions: [
       "Minä vuonna Suomesta tuli Venäjän autonominen suuriruhtinaskunta?",
       "Minä vuonna Berliinin muuri murtui?",
-      "Kuka hävisi Waterloon taistelun vuonna 1815?",
+      "Minkä henkilön murha Sarajevossa vuonna 1914 käynnisti ensimmäisen maailmansodan?",
     ],
   },
   {
@@ -97,17 +97,17 @@ export const subjects = [
     questions: [
       "Mistä puulajista suomalainen vaneri valmistetaan yleisimmin?",
       "Mikä on Suomen metsien yleisin puulaji?",
-      "Kuinka monta senttimetriä on yksi tuuma?",
+      "Mikä on sen puuliitoksen nimi, jossa toisen laudan kieli sopii toisen laudan uraan?",
     ],
   },
   {
-    key: "kasityot",
-    title: "Käsityöt",
-    color: "#e05b7c",
+    key: "kuvaamataito",
+    title: "Kuvaamataito",
+    color: "#7b5cd6",
     questions: [
-      "Mikä on sen ompelukoneen osan nimi, joka painaa kangasta alaspäin ompelun aikana?",
-      "Mitä ompelukoneen ommelta käytetään yleisimmin kankaan reunan huolitteluun?",
-      "Mihin sormeen sormustin laitetaan?",
+      { text: "Kuka maalasi teoksen Huuto?", figure: "painting" },
+      "Mikä grafiikan menetelmä perustuu siihen, että kuvio syövytetään metallilaattaan hapolla?",
+      "Mikä maalaustekniikka tarkoittaa maalaamista märälle kalkkirappaukselle?",
     ],
   },
   {
@@ -126,7 +126,7 @@ export const subjects = [
     color: "#e2463f",
     questions: [
       "Mikä hormoni laskee veren sokeripitoisuutta?",
-      "Mikä on rattijuopumuksen promilleraja Suomessa?",
+      "Mikä on ruorijuopumuksen promilleraja Suomessa?",
       "Mikä on aikuisen elvytyksessä painallusten ja puhallusten suhde?",
     ],
   },

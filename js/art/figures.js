@@ -4,4 +4,8 @@ export const figures = {
   bird: () => `
     <img src="img/lintu.jpg" alt="" />
     <span class="q-credit">Kuva: Francis Franklin / CC BY-SA 3.0</span>`,
+  // Public-domain painting from Wikimedia Commons; the credit leaves out the painter because that is the answer.
+  painting: () => `
+    <img class="portrait" src="img/maalaus.jpg" alt="" />
+    <span class="q-credit">Kuva: Wikimedia Commons</span>`,
 };

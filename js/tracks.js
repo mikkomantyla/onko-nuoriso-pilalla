@@ -291,28 +291,33 @@ export const tracks = {
     mix: { leadSend: 0.4 },
   },
 
-  // Cozy lo-fi: descending chords, soft rim and a celesta melody.
-  kasityot: {
-    bpm: 80,
-    swing: 0.15,
-    chords: ["Fmaj7", "Em7", "Dm7", "Cmaj7"],
-    chordInst: "rhodes",
-    chordRhythm: "x-------x-------",
-    bassInst: "subBass",
-    bass: "1 - - - . . . . 5 - - - . . 8 -",
-    leadInst: "bell",
+  // Parisian café jazz: "la pompe" guitar, walking bass, brushes and an accordion-ish lead.
+  kuvaamataito: {
+    bpm: 112,
+    swing: 0.18,
+    chords: ["Am6", "E7", "Am6", "E7", "Dm6", "Am6", "E7", "Am6"],
+    chordInst: "pluck",
+    chordRhythm: "x...x...x...x...",
+    bassInst: "pluckBass",
+    bass: "1 - - - 5 - - - 1 - - - 5 - - -",
+    leadInst: "organ",
     lead: [
-      "A5 - - - C6 - - - E6 - - - C6 - - -",
-      "B5 - - - - - - - G5 - - - - - - -",
-      "F5 - - - A5 - - - C6 - - - A5 - - -",
-      "G5 - - - - - - - E5 - - - . . . .",
+      "E5 - . E5 F5 . E5 . C5 - . A4 - - . .",
+      "B4 - . G#4 . B4 . D5 . F5 - - E5 - - .",
+      "A4 . C5 . E5 . A5 - - - G#5 . A5 - - .",
+      "B5 - - - - - . . . . . . . . . .",
+      "F5 - . F5 G5 . F5 . D5 - . B4 - - . .",
+      "C5 - . E5 . A5 . C6 . B5 - - A5 - - .",
+      "G#5 - . F5 . E5 . D5 . B4 - - G#4 - - .",
+      "A4 - - - - - - - . . . . . . . .",
     ],
     drums: {
-      kick: "x.........x.....",
+      kick: "x.......x.......",
+      shaker: "x.x.x.x.x.x.x.x.",
       rim: "....x.......x...",
-      shaker: "..x...x...x...x.",
     },
-    mix: { lead: 0.7, leadSend: 0.5 },
+    drumLevels: { kick: 0.45, rim: 0.5 },
+    mix: { chords: 0.8, lead: 1.1, leadSend: 0.35 },
   },
 
   // Globetrotting afro-pop: kalimba riff, toms and shaker.
