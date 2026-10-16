@@ -1,5 +1,5 @@
 import { subjects } from "./data.js";
-import { isMuted, playWhoosh, setMuted, startMusic } from "./music.js";
+import { isMuted, playWhoosh, setMuted, setTrack, startMusic } from "./music.js";
 import { pisaScene } from "./scenes/pisa.js";
 import { coverScene } from "./scenes/cover.js";
 import { subjectScene } from "./scenes/subject.js";
@@ -9,15 +9,16 @@ const STAGE_W = 1920;
 const STAGE_H = 1080;
 const WIPE_COLORS = ["#ff5d8f", "#ffd23f", "#3ec1d3", "#7bd65b", "#ff8f2e", "#a66cff"];
 
-// Each world: a label for the progress pill and a scene factory `(root) => { skip(), destroy() }`.
+// Each world: a label for the progress pill, its music track, and a scene factory `(root) => { skip(), destroy() }`.
 const worlds = [
-  { label: "Pisa-tulokset", create: pisaScene },
-  { label: "Onko nuoriso pilalla?", create: coverScene },
+  { label: "Pisa-tulokset", track: "pisa", create: pisaScene },
+  { label: "Onko nuoriso pilalla?", track: "cover", create: coverScene },
   ...subjects.map((subject, i) => ({
     label: `${subject.title} · ${i + 1}/${subjects.length}`,
+    track: subject.key,
     create: (root) => subjectScene(root, subject),
   })),
-  { label: "Vastausten aika!", create: endScene },
+  { label: "Vastausten aika!", track: "end", create: endScene },
 ];
 
 const stage = document.getElementById("stage");
@@ -43,6 +44,7 @@ function mount(i) {
   sceneRoot.append(root);
   current = worlds[i].create(root);
   progress.textContent = worlds[i].label;
+  setTrack(worlds[i].track);
 }
 
 // Chunky circles cover the stage, the world swaps underneath, and they shrink away again.
