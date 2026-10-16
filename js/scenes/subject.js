@@ -1,5 +1,6 @@
 import { rooms } from "../art/rooms/index.js";
 import { W, H, starPath, INK } from "../art/kit.js";
+import { figures } from "../art/figures.js";
 
 const TITLE_AT_MS = 1300;
 const TITLE_HOLD_MS = 2300;
@@ -34,7 +35,12 @@ export function subjectScene(root, subject) {
       ${subject.questions
         .map((q, i) => {
           const text = typeof q === "string" ? q : q.text;
-          const symbol = typeof q === "string" ? "" : `<div class="q-symbol" aria-label="nuottiavain">${q.symbol}</div>`;
+          const symbol =
+            typeof q === "string"
+              ? ""
+              : q.symbol
+                ? `<div class="q-symbol" aria-label="nuottiavain">${q.symbol}</div>`
+                : `<div class="q-figure" role="img" aria-label="kuva">${figures[q.figure]()}</div>`;
           return `<div class="q-card" style="--i:${i}">
             <div class="q-num"><span class="game-text">${i + 1}</span></div>
             <div class="q-text">${escapeHtml(text)}</div>${symbol}

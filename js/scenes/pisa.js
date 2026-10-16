@@ -1,5 +1,6 @@
 import { pisa } from "../data.js";
 import { INK, ol, pop, W, H } from "../art/kit.js";
+import { playSfx } from "../sfx.js";
 
 const BOARD = { x: 250, y: 190, w: 1420, h: 760 };
 const PLOT = { left: 190, right: 1300, top: 150, bottom: 610 };
@@ -168,6 +169,7 @@ export function pisaScene(root) {
     cancelAnimationFrame(frame);
     render(1);
     svg.classList.add("pisa-done");
+    playSfx("pisa", 0.3);
   };
 
   const tick = (now) => {

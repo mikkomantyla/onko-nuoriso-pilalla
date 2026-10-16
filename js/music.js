@@ -85,6 +85,8 @@ const compiled = Object.fromEntries(Object.entries(tracks).map(([key, track]) =>
 let ctx = null;
 let master = null;
 let mixIn = null;
+let duckNode = null;
+let sfxBus = null;
 let reverb = null;
 let noise = null;
 let muted = false;
@@ -118,6 +120,14 @@ function setup() {
   wet.gain.value = 0.9;
   reverb.connect(wet).connect(comp);
   mixIn = comp;
+  duckNode = ctx.createGain();
+  duckNode.connect(comp);
+  sfxBus = ctx.createGain();
+  sfxBus.gain.value = 0.9;
+  sfxBus.connect(comp);
+  const sfxSend = ctx.createGain();
+  sfxSend.gain.value = 0.25;
+  sfxBus.connect(sfxSend).connect(reverb);
   noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
   const data = noise.getChannelData(0);
   for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
@@ -427,7 +437,7 @@ function startTrack(key) {
   const bus = ctx.createGain();
   bus.gain.setValueAtTime(0, now);
   bus.gain.setTargetAtTime(1, now + FADE_OUT_S * 0.6, FADE_IN_S / 3);
-  bus.connect(mixIn);
+  bus.connect(duckNode);
   const mix = track.mix ?? {};
   const lanes = {
     chords: lane(bus, mix.chords ?? 1, mix.chordsSend ?? 0.25),
@@ -520,6 +530,17 @@ export function playWhoosh() {
   f.frequency.setValueAtTime(300, t);
   f.frequency.exponentialRampToValueAtTime(3200, t + 0.35);
   noiseSource(t, t + 1).connect(f).connect(g).connect(mixIn);
+}
+
+/** The shared audio graph for sound effects, or null before the first user gesture. */
+export function sfxOutput() {
+  return ctx ? { ctx, out: sfxBus, noise } : null;
+}
+
+/** Lowers the music under a sound effect starting at `t` for `seconds`. */
+export function duck(t, seconds) {
+  duckNode.gain.setTargetAtTime(0.35, t, 0.05);
+  duckNode.gain.setTargetAtTime(1, t + seconds, 0.4);
 }
 
 export function stopMusic() {

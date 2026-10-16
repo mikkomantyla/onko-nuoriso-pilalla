@@ -66,7 +66,7 @@ export const subjects = [
     color: "#2e9d5b",
     questions: [
       "Mikä veriryhmä sopii luovutettavaksi kaikille vastaanottajille?",
-      "Mikä eläin on Suomen kansalliseläin?",
+      { text: "Tunnista laji.", figure: "bird" },
       "Kuinka monta kromosomia ihmisen tavallisessa solussa on?",
     ],
   },

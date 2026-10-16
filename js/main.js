@@ -4,6 +4,7 @@ import { pisaScene } from "./scenes/pisa.js";
 import { coverScene } from "./scenes/cover.js";
 import { subjectScene } from "./scenes/subject.js";
 import { endScene } from "./scenes/end.js";
+import { playSfx } from "./sfx.js";
 
 const STAGE_W = 1920;
 const STAGE_H = 1080;
@@ -11,7 +12,8 @@ const WIPE_COLORS = ["#ff5d8f", "#ffd23f", "#3ec1d3", "#7bd65b", "#ff8f2e", "#a6
 
 // Each world: a label for the progress pill, its music track, and a scene factory `(root) => { skip(), destroy() }`.
 const worlds = [
-  { label: "Pisa-tulokset", track: "pisa", create: pisaScene },
+  // The Pisa world plays its own sound effect once the chart lands.
+  { label: "Pisa-tulokset", track: "pisa", sfxOnEnter: false, create: pisaScene },
   { label: "Onko nuoriso pilalla?", track: "cover", create: coverScene },
   ...subjects.map((subject, i) => ({
     label: `${subject.title} · ${i + 1}/${subjects.length}`,
@@ -45,6 +47,7 @@ function mount(i) {
   current = worlds[i].create(root);
   progress.textContent = worlds[i].label;
   setTrack(worlds[i].track);
+  if (worlds[i].sfxOnEnter !== false) playSfx(worlds[i].track, 0.45);
 }
 
 // Chunky circles cover the stage, the world swaps underneath, and they shrink away again.
