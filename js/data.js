@@ -142,5 +142,36 @@ export const pisa = {
   ],
 };
 
-// High schools with their latest admission cut-off (lukuaineiden keskiarvo). The quizmaster supplies the full list.
-export const schools = [{ name: "Vaskivuoren lukio", year: 2026, limit: 7.67 }];
+// High schools with their 2026 admission cut-off (lukuaineiden keskiarvo), most selective first.
+export const schools = [
+  { name: "Helsingin normaalilyseo (Helsinki)", year: 2026, limit: 9.58 },
+  { name: "Ressun lukio (Helsinki)", year: 2026, limit: 9.54 },
+  { name: "Tampereen yliopiston normaalikoulun lukio", year: 2026, limit: 9.33 },
+  { name: "Jyväskylän normaalikoulun lukio", year: 2026, limit: 9.25 },
+  { name: "Otaniemen lukio (Espoo)", year: 2026, limit: 9.17 },
+  { name: "Tapiolan lukio (Espoo)", year: 2026, limit: 9.17 },
+  { name: "Kulosaaren yhteiskoulun lukio (Helsinki)", year: 2026, limit: 9.17 },
+  { name: "Töölön yhteiskoulun lukio (Helsinki)", year: 2026, limit: 9.08 },
+  { name: "Kerttulin lukio (Turku)", year: 2026, limit: 9.00 },
+  { name: "Tampereen lyseon lukio", year: 2026, limit: 8.83 },
+  { name: "Turun Suomalaisen Yhteiskoulun lukio", year: 2026, limit: 8.83 },
+  { name: "Alppilan lukio (Helsinki)", year: 2026, limit: 8.77 },
+  { name: "Puolalanmäen lukio (Turku)", year: 2026, limit: 8.75 },
+  { name: "Pyynikin lukio (Tampere)", year: 2026, limit: 8.42 },
+  { name: "Helsingin kielilukio", year: 2026, limit: 8.42 },
+  { name: "Martinlaakson lukio (Vantaa)", year: 2026, limit: 8.33 },
+  { name: "Tampereen yhteiskoulun lukio", year: 2026, limit: 8.25 },
+  { name: "Luostarivuoren Lyseon lukio (Turku)", year: 2026, limit: 8.08 },
+  { name: "Vaskivuoren lukio (Vantaa)", year: 2026, limit: 7.92 },
+  { name: "Turun klassillinen lukio", year: 2026, limit: 7.92 },
+  { name: "Kallion lukio (Helsinki)", year: 2026, limit: 7.85 },
+  { name: "Tampereen teknillinen lukio", year: 2026, limit: 7.75 },
+  { name: "Tikkurilan lukio (Vantaa)", year: 2026, limit: 7.75 },
+  { name: "Konepajan lukio (Helsinki)", year: 2026, limit: 7.69 },
+  { name: "Sotungin lukio (Vantaa)", year: 2026, limit: 7.67 },
+  { name: "Vuosaaren lukio (Helsinki)", year: 2026, limit: 7.58 },
+  { name: "Helsingin medialukio", year: 2026, limit: 7.15 },
+  { name: "Lumon lukio (Vantaa)", year: 2026, limit: 7.08 },
+  { name: "Euran lukio", year: 2026, limit: 5.33 },
+  { name: "Kouvolan yhteislukio, Kuusankosken toimipiste", year: 2026, limit: 5.33 },
+];

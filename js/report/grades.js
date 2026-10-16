@@ -40,7 +40,9 @@ export function academicAverage(subjects, grades) {
 
 /** The most selective school whose cut-off the average reaches, or null when it reaches none. */
 export function bestSchool(schools, average) {
-  return [...schools].sort((a, b) => b.limit - a.limit).find((s) => average >= s.limit) ?? null;
+  // Compare the average as it is shown, to two decimals.
+  const shown = Math.round(average * 100) / 100;
+  return [...schools].sort((a, b) => b.limit - a.limit).find((s) => shown >= s.limit) ?? null;
 }
 
 /** Finnish decimal formatting, e.g. 7.666 → "7,67". */
