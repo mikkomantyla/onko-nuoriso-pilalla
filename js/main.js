@@ -15,7 +15,7 @@ const WIPE_COLORS = ["#ff5d8f", "#ffd23f", "#3ec1d3", "#7bd65b", "#ff8f2e", "#a6
 const worlds = [
   // The Pisa world plays its own sound effect once the chart lands.
   { label: "Pisa-tulokset", track: "pisa", sfxOnEnter: false, create: pisaScene },
-  { label: "Onko nuoriso pilalla?", track: "cover", create: coverScene },
+  { label: "Onko entinen nuoriso pilalla?", track: "cover", create: coverScene },
   ...subjects.map((subject, i) => ({
     label: `${subject.title} · ${i + 1}/${subjects.length}`,
     track: subject.key,

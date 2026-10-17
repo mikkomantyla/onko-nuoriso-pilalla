@@ -112,15 +112,16 @@ const style = `<style>
   @keyframes cover-ping { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
   @keyframes cover-plane { from { offset-distance: 0%; } to { offset-distance: 100%; } }
 
-  .cover-title { position: absolute; left: 0; right: 0; top: 250px; text-align: center; z-index: 3; }
+  .cover-title { position: absolute; left: 0; right: 0; top: 212px; margin: 0; text-align: center; z-index: 3; }
   .cover-line { display: block; white-space: nowrap; }
-  .cover-line + .cover-line { margin-top: 18px; }
+  .cover-line + .cover-line { margin-top: 10px; }
   .cover-letter {
-    display: inline-block; font-size: 210px; -webkit-text-stroke-width: 26px; text-shadow: 0 18px 0 ${INK};
+    display: inline-block; font-size: 170px; -webkit-text-stroke-width: 26px; text-shadow: 0 18px 0 ${INK};
     animation: cover-drop 0.7s cubic-bezier(.34,1.7,.5,1) both, cover-wiggle 2.4s ease-in-out infinite;
     animation-delay: calc(0.3s + var(--i) * 0.07s), calc(2s + var(--i) * 0.12s);
   }
-  .cover-line.big .cover-letter { font-size: 270px; }
+  .cover-line.mid .cover-letter { font-size: 200px; }
+  .cover-line.big .cover-letter { font-size: 235px; }
   .cover-space { display: inline-block; width: 70px; }
   @keyframes cover-drop { 0% { transform: translateY(-700px) rotate(-30deg); } 100% { transform: none; } }
   @keyframes cover-wiggle { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-16px) rotate(3deg); } }
@@ -129,9 +130,9 @@ const style = `<style>
     position: absolute; left: 50%; z-index: 4; padding: 12px 54px 16px; border: 10px solid ${INK}; border-radius: 999px;
     font-family: var(--display); white-space: nowrap; box-shadow: 0 12px 0 ${INK};
   }
-  .cover-kicker { top: 120px; background: #3ec1d3; color: #fff; font-size: 64px; -webkit-text-stroke: 10px ${INK}; paint-order: stroke fill;
+  .cover-kicker { top: 88px; background: #3ec1d3; color: #fff; font-size: 64px; -webkit-text-stroke: 10px ${INK}; paint-order: stroke fill;
     transform: translateX(-50%) rotate(-3deg); animation: cover-sticker 0.7s 0.1s cubic-bezier(.34,1.7,.5,1) both; }
-  .cover-sub { top: 830px; background: #fff6df; color: ${INK}; font-size: 58px;
+  .cover-sub { top: 884px; background: #fff6df; color: ${INK}; font-size: 58px;
     transform: translateX(-50%) rotate(2deg); animation: cover-sticker 0.7s 2.1s cubic-bezier(.34,1.7,.5,1) both; }
   @keyframes cover-sticker { 0% { scale: 0; } 100% { scale: 1; } }
 </style>`;
@@ -153,8 +154,9 @@ export function coverScene(root) {
     </svg>
     <div class="cover-kicker">YLÄASTEVISA</div>
     <h1 class="cover-title">
-      <span class="cover-line">${titleLine("ONKO NUORISO", 0)}</span>
-      <span class="cover-line big">${titleLine("PILALLA?", 12)}</span>
+      <span class="cover-line">${titleLine("ONKO ENTINEN", 0)}</span>
+      <span class="cover-line mid">${titleLine("NUORISO", 12)}</span>
+      <span class="cover-line big">${titleLine("PILALLA?", 19)}</span>
     </h1>
     <div class="cover-sub">Palataan yläasteelle! 🎒</div>`;
   return { skip: () => false, destroy() {} };
